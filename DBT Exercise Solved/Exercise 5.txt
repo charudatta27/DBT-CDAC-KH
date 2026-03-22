@@ -1,0 +1,122 @@
+1. Display the Supplier name and the Quantity sold. 
+mysql> SELECT s.Sname, spj.Qty FROM S s JOIN SPJ spj ON s.Snum = spj.Snum;
++-------+------+
+| Sname | Qty  |
++-------+------+
+| Amit  |  900 |
+| Amit  |  100 |
+| Ravi  |  200 |
++-------+------+
+3 rows in set (0.075 sec)
+ 
+2. Display the Part name and Quantity sold. 
+mysql> SELECT p.Pname, spj.Qty FROM P p JOIN SPJ spj ON p.Pnum = spj.Pnum;
++-------+------+
+| Pname | Qty  |
++-------+------+
+| Bolt  |  900 |
+| Bolt  |  100 |
+| Nut   |  200 |
++-------+------+
+3 rows in set (0.008 sec)
+ 
+3. Display the Project name and Quantity sold. 
+mysql> SELECT j.Jname, spj.Qty FROM J j JOIN SPJ spj ON j.Jnum = spj.Jnum;
++----------+------+
+| Jname    | Qty  |
++----------+------+
+| Project1 |  900 |
+| Project1 |  100 |
+| Project2 |  200 |
++----------+------+
+3 rows in set (0.078 sec)
+ 
+4. Display the Supplier name, Part name, Project name and Quantity sold. 
+mysql> SELECT s.Sname, p.Pname, j.Jname, spj.Qty FROM SPJ spj JOIN S s ON spj.Snum = s.Snum JOIN P p ON spj.Pnum = p.Pnum JOIN J j ON spj.Jnum = j.Jnum;
++-------+-------+----------+------+
+| Sname | Pname | Jname    | Qty  |
++-------+-------+----------+------+
+| Amit  | Bolt  | Project1 |  900 |
+| Amit  | Bolt  | Project1 |  100 |
+| Ravi  | Nut   | Project2 |  200 |
++-------+-------+----------+------+
+3 rows in set (0.130 sec)
+ 
+5. Display the Supplier name, Supplying Parts to a Project in the same City. 
+mysql> SELECT s.Sname, j.Jname, s.City FROM SPJ spj JOIN S s ON spj.Snum = s.Snum JOIN J j ON spj.Jnum = j.Jnum WHERE s.City = j.City;
++-------+----------+--------+
+| Sname | Jname    | City   |
++-------+----------+--------+
+| Amit  | Project2 | London |
++-------+----------+--------+
+1 row in set (0.078 sec)
+
+ 
+6. Display the Part name that is ‘Red’ is color, and the Quantity sold. 
+mysql> SELECT p.Pname, spj.Qty FROM P p JOIN SPJ spj ON p.Pnum = spj.Pnum WHERE p.Color = 'Red';
++-------+------+
+| Pname | Qty  |
++-------+------+
+| Bolt  |  100 |
+| Bolt  |  900 |
++-------+------+
+2 rows in set (0.009 sec)
+ 
+7. Display all the Quantity sold by Suppliers with the Status = 20. 
+mysql> SELECT spj.Qty FROM SPJ spj JOIN S s ON spj.Snum = s.Snum WHERE s.Status = 20;
++------+
+| Qty  |
++------+
+|  100 |
+|  900 |
++------+
+2 rows in set (0.090 sec)
+ 
+8. Display all the Parts and Quantity with a Weight > 14. 
+mysql> INSERT INTO P VALUES ('P4','Wheel','Black',16,'Delhi');INSERT INTO SPJ VALUES ('S1','P4','J1',300);
+Query OK, 1 row affected (0.133 sec)
+
+Query OK, 1 row affected (0.039 sec)
+
+mysql> SELECT p.Pname, spj.Qty FROM P p JOIN SPJ spj ON p.Pnum = spj.Pnum WHERE p.Weight > 14;
++-------+------+
+| Pname | Qty  |
++-------+------+
+| Wheel |  300 |
+| Wheel |  300 |
++-------+------+
+2 rows in set (0.009 sec)
+ 
+9. Display all the Project names and City, which has bought more than 500 Parts.
+mysql> SELECT j.Jname, j.City FROM J j JOIN SPJ spj ON j.Jnum = spj.Jnum GROUP BY j.Jname, j.City HAVING SUM(spj.Qty) > 500;
++----------+--------+
+| Jname    | City   |
++----------+--------+
+| Project1 | Athens |
++----------+--------+
+1 row in set (0.075 sec) 
+ 
+10. Display all the Part names and Quantity sold that have a Weight less than 15. 
+mysql> SELECT p.Pname, spj.Qty FROM P p JOIN SPJ spj ON p.Pnum = spj.Pnum WHERE p.Weight < 15;
++-------+------+
+| Pname | Qty  |
++-------+------+
+| Bolt  |  100 |
+| Nut   |  200 |
+| Bolt  |  900 |
++-------+------+
+3 rows in set (0.009 sec)
+ 
+11. Display all the Employee names and the name of their Managers.
+mysql> SELECT e1.EMPNAME AS Employee, e2.EMPNAME AS Manager FROM SEMP e1 LEFT JOIN SEMP e2 ON e1.DEPTHEAD = e2.EMPNO;
++----------+---------+
+| Employee | Manager |
++----------+---------+
+| SUNIL    | NULL    |
+| HIREN    | NULL    |
+| ALI      | SUNIL   |
+| GEORGE   | HIREN   |
++----------+---------+
+4 rows in set (0.109 sec)
+
+mysql>

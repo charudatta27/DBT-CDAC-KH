@@ -1,0 +1,100 @@
+1. Display all the Suppliers with the same Status as the supplier, ‘CLARK’.
+mysql> INSERT INTO S VALUES ('S5','CLARK',20,'London');
+Query OK, 1 row affected (0.115 sec) 
+mysql> SELECT *FROM S WHERE Status = (    SELECT Status    FROM S    WHERE Sname = 'CLARK');
++------+-------+--------+--------+
+| Snum | Sname | Status | City   |
++------+-------+--------+--------+
+| S1   | Amit  |     20 | London |
+| S4   | Blake |     20 | London |
+| S5   | CLARK |     20 | London |
++------+-------+--------+--------+
+3 rows in set (0.009 sec)
+ 
+2. Display all the Employees in the same department as the employee ‘MILLER’.
+mysql> INSERT INTO SEMP VALUES ('0005','MILLER',7000,'10',NULL);
+Query OK, 1 row affected (0.109 sec)
+
+mysql> SELECT *FROM SEMP WHERE DEPTNO = (SELECT DEPTNO FROM SEMP WHERE EMPNAME = 'MILLER');
++-------+---------+-------+--------+----------+
+| EMPNO | EMPNAME | BASIC | DEPTNO | DEPTHEAD |
++-------+---------+-------+--------+----------+
+| 0001  | SUNIL   |  6000 | 10     | NULL     |
+| 0003  | ALI     |  4000 | 10     | 0001     |
+| 0005  | MILLER  |  7000 | 10     | NULL     |
++-------+---------+-------+--------+----------+
+3 rows in set (0.009 sec) 
+ 
+3. Display all the Parts which have more Weight than all the Red parts. 
+mysql> SELECT *FROM P WHERE Weight > ALL (SELECT Weight FROM P WHERE Color = 'Red');
++------+-------+-------+--------+--------+
+| Pnum | Pname | Color | Weight | City   |
++------+-------+-------+--------+--------+
+| P2   | Nut   | Blue  |     14 | Paris  |
+| P3   | Screw | Green |     13 | London |
+| P5   | Pipe  | Gray  |     20 | Mumbai |
+| P4   | Wheel | Black |     16 | Delhi  |
+| P4   | Wheel | Black |     16 | Delhi  |
++------+-------+-------+--------+--------+
+5 rows in set (0.077 sec)
+ 
+4. Display all the Projects going on in the same city as the project ‘TAPE’. 
+mysql> INSERT INTO J VALUES ('J3','TAPE','London');
+Query OK, 1 row affected (0.057 sec)
+mysql> SELECT *FROM J WHERE City = ( SELECT City  FROM J WHERE Jname = 'TAPE');
++------+----------+--------+
+| Jnum | Jname    | City   |
++------+----------+--------+
+| J2   | Project2 | London |
+| J3   | TAPE     | London |
++------+----------+--------+
+2 rows in set (0.008 sec)
+
+ 
+5. Display all the Parts with Weight less than all the Green parts. 
+mysql> SELECT *FROM P WHERE Weight < ALL (SELECT Weight FROM P WHERE Color = 'Green');
++------+-------+-------+--------+--------+
+| Pnum | Pname | Color | Weight | City   |
++------+-------+-------+--------+--------+
+| P1   | Bolt  | Red   |     12 | London |
+| P4   | Wheel | Black |      8 | Delhi  |
++------+-------+-------+--------+--------+
+2 rows in set (0.013 sec)
+ 
+6. Display the name of the Supplier who has sold the maximum Quantity (in one 
+sale). 
+mysql> SELECT Sname FROM S WHERE Snum = (SELECT Snum FROM SPJ ORDER BY Qty DESC LIMIT 1);
++-------+
+| Sname |
++-------+
+| Amit  |
++-------+
+1 row in set (0.009 sec)
+ 
+7. Display the name of the Employee with the minimum Salary. 
+mysql> SELECT EMPNAME FROM SEMP WHERE BASIC = (SELECT MIN(BASIC) FROM SEMP);
++---------+
+| EMPNAME |
++---------+
+| ALI     |
++---------+
+1 row in set (0.009 sec)
+ 
+8. Display the name of the Supplier who has sold the maximum overall Quantity (sum 
+of Sales). 
+mysql> SELECT Sname FROM S WHERE Snum = (SELECT Snum FROM SPJ GROUP BY Snum ORDER BY SUM(Qty) DESC    LIMIT 1);
++-------+
+| Sname |
++-------+
+| Amit  |
++-------+
+1 row in set (0.010 sec)
+ 
+9. Display the name of the Department with the maximum number of Employees
+mysql> SELECT DEPTNAME FROM SDEPT WHERE DEPTNO = (    SELECT DEPTNO    FROM SEMP    GROUP BY DEPTNO    ORDER BY COUNT(*) DESC    LIMIT 1);
++-------------+
+| DEPTNAME    |
++-------------+
+| Development |
++-------------+
+1 row in set (0.089 sec)

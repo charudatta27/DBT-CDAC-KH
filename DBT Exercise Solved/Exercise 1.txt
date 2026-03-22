@@ -1,0 +1,147 @@
+mysql> CREATE TABLE SEMP (    EMPNO CHAR(4),    EMPNAME CHAR(20),    BASIC FLOAT,    DEPTNO CHAR(2),    DEPTHEAD CHAR(4));
+Query OK, 0 rows affected (2.197 sec)
+
+mysql> CREATE TABLE SDEPT (    DEPTNO CHAR(2),    DEPTNAME CHAR(15));
+Query OK, 0 rows affected (0.431 sec)
+
+mysql> INSERT INTO SDEPT VALUES ('10', 'Development'),('20', 'Training');
+Query OK, 2 rows affected (0.318 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO SEMP VALUES ('0001', 'SUNIL', 6000, '10', NULL),('0002', 'HIREN', 8000, '20', NULL),('0003', 'ALI', 4000, '10', '0001'),('0004', 'GEORGE', 6000, '20', '0002');
+Query OK, 4 rows affected (0.133 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> CREATE TABLE S (    Snum CHAR(2),    Sname CHAR(20),    Status INT,    City CHAR(20));
+Query OK, 0 rows affected (0.549 sec)
+
+mysql> CREATE TABLE P (    Pnum CHAR(2),    Pname CHAR(20),    Color CHAR(10),    Weight FLOAT,    City CHAR(20));
+Query OK, 0 rows affected (0.328 sec)
+
+mysql> CREATE TABLE SPJ (    Snum CHAR(2),    Pnum CHAR(2),    Jnum CHAR(2),    Qty INT);
+Query OK, 0 rows affected (0.322 sec)
+
+mysql> INSERT INTO S VALUES('S1','Amit',20,'London'),('S2','Ravi',10,'Paris'),('S3','Neha',30,'Athens');
+Query OK, 3 rows affected (0.178 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO P VALUES('P1','Bolt','Red',12,'London'),('P2','Nut','Blue',14,'Paris'),('P3','Screw','Green',13,'London');
+Query OK, 3 rows affected (0.145 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO J VALUES('J1','Project1','Athens'),('J2','Project2','London');
+ERROR 1146 (42S02): Table 'sales.j' doesn't exist
+mysql> CREATE TABLE J (    Jnum CHAR(2),    Jname CHAR(20),    City CHAR(20));
+Query OK, 0 rows affected (0.337 sec)
+
+mysql> INSERT INTO J VALUES('J1','Project1','Athens'),('J2','Project2','London');
+Query OK, 2 rows affected (0.144 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO SPJ VALUES('S1','P1','J1',100),('S2','P2','J2',200);
+Query OK, 2 rows affected (0.128 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM S;
++------+-------+--------+--------+
+| Snum | Sname | Status | City   |
++------+-------+--------+--------+
+| S1   | Amit  |     20 | London |
+| S2   | Ravi  |     10 | Paris  |
+| S3   | Neha  |     30 | Athens |
++------+-------+--------+--------+
+3 rows in set (0.071 sec)
+
+mysql> SELECT Snum, Sname FROM S;
++------+-------+
+| Snum | Sname |
++------+-------+
+| S1   | Amit  |
+| S2   | Ravi  |
+| S3   | Neha  |
++------+-------+
+3 rows in set (0.008 sec)
+
+
+mysql> SELECT Pname, Color FROM P WHERE City = 'London';
++-------+-------+
+| Pname | Color |
++-------+-------+
+| Bolt  | Red   |
+| Screw | Green |
++-------+-------+
+2 rows in set (0.008 sec)
+
+
+mysql> SELECT * FROM S WHERE City = 'London';
++------+-------+--------+--------+
+| Snum | Sname | Status | City   |
++------+-------+--------+--------+
+| S1   | Amit  |     20 | London |
++------+-------+--------+--------+
+1 row in set (0.065 sec)
+
+mysql> SELECT * FROM S WHERE City IN ('Paris','Athens');
++------+-------+--------+--------+
+| Snum | Sname | Status | City   |
++------+-------+--------+--------+
+| S2   | Ravi  |     10 | Paris  |
+| S3   | Neha  |     30 | Athens |
++------+-------+--------+--------+
+2 rows in set (0.075 sec)
+
+mysql> SELECT * FROM J WHERE City = 'Athens';
++------+----------+--------+
+| Jnum | Jname    | City   |
++------+----------+--------+
+| J1   | Project1 | Athens |
++------+----------+--------+
+1 row in set (0.008 sec)
+
+mysql> SELECT Pname FROM P WHERE Weight BETWEEN 12 AND 14;
++-------+
+| Pname |
++-------+
+| Bolt  |
+| Nut   |
+| Screw |
++-------+
+3 rows in set (0.069 sec)
+
+mysql> SELECT * FROM S WHERE Status >= 20;
++------+-------+--------+--------+
+| Snum | Sname | Status | City   |
++------+-------+--------+--------+
+| S1   | Amit  |     20 | London |
+| S3   | Neha  |     30 | Athens |
++------+-------+--------+--------+
+2 rows in set (0.008 sec)
+
+mysql> SELECT * FROM S WHERE City <> 'London';
++------+-------+--------+--------+
+| Snum | Sname | Status | City   |
++------+-------+--------+--------+
+| S2   | Ravi  |     10 | Paris  |
+| S3   | Neha  |     30 | Athens |
++------+-------+--------+--------+
+2 rows in set (0.007 sec)
+
+mysql> SELECT DISTINCT City FROM S;
++--------+
+| City   |
++--------+
+| London |
+| Paris  |
+| Athens |
++--------+
+3 rows in set (0.107 sec)
+
+mysql> SELECT     Pname,    Weight AS Grams,    Weight * 1000 AS Milligrams,    Weight / 1000 AS Kilograms FROM P;
++-------+-------+------------+-----------+
+| Pname | Grams | Milligrams | Kilograms |
++-------+-------+------------+-----------+
+| Bolt  |    12 |      12000 |     0.012 |
+| Nut   |    14 |      14000 |     0.014 |
+| Screw |    13 |      13000 |     0.013 |
++-------+-------+------------+-----------+
+3 rows in set (0.067 sec)
